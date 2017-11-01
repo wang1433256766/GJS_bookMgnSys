@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UserRole">
+
+    <resultMap type="cn.com.miaoto.pojo.UserRole" id="UserRoleResult">
+        <id column="UR_ID" jdbcType="INTEGER" property="urid"/>
+        <result column="UR_UID" jdbcType="VARCHAR" property="urUid"/>
+        <result column="UR_RID" jdbcType="VARCHAR" property="urRid"/>
+        <result column="UR_CREATETIME" jdbcType="DATE" property="createtime"/>
+        <result column="UR_UPDATETIME" jdbcType="DATE" property="updatetime"/>
+    </resultMap>
+
+    <sql id="columns">UR_ID, UR_UID, UR_RID, UR_CREATETIME, UR_UPDATETIME
+    </sql>
+
+    <sql id="columns2">UR_UID, UR_RID, UR_CREATETIME, UR_UPDATETIME
+    </sql>
+
+    <insert id="insertRids" parameterType="cn.com.miaoto.modules.role.model.AddRoles4UserReq" useGeneratedKeys="true"
+            keyProperty="urid">
+        INSERT INTO sys_user_role(
+        <include refid="columns2"/>
+        ) VALUES
+        <foreach collection="ridList" item="item" separator=",">
+            (#{uid}, #{item}, GETDATE(), GETDATE() )
+        </foreach>
+    </insert>
+
+    <insert id="insertUids" parameterType="cn.com.miaoto.modules.role.model.AddUsers2RoleReq" useGeneratedKeys="true"
+            keyProperty="urid">
+        INSERT INTO sys_user_role(
+        <include refid="columns2"/>
+        ) VALUES
+        <foreach collection="uidList" item="item" separator=",">
+            (#{item}, #{rid}, GETDATE(), GETDATE() )
+        </foreach>
+    </insert>
+
+    <delete id="delete" parameterType="UserRole">
+        DELETE FROM sys_user_role
+        <where>
+            <if test="urUid != null">
+                ur_uid = #{urUid}
+            </if>
+            <if test="urRid != null">
+                ur_rid = #{urRid}
+            </if>
+        </where>
+    </delete>
+</mapper>

@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Book">
+
+    <resultMap type="cn.com.miaoto.pojo.Book" id="BookResult">
+        <id column="B_ID" jdbcType="INTEGER" property="bid"/>
+        <result column="B_CREATETIME" jdbcType="DATE" property="createtime"/>
+        <result column="B_UPDATETIME" jdbcType="DATE" property="updatetime"/>
+        <result column="B_ISBN" jdbcType="VARCHAR" property="isbn"/>
+        <result column="B_NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="B_FOREIGN_NAME" jdbcType="VARCHAR" property="foreignName"/>
+        <result column="B_EDITION" jdbcType="VARCHAR" property="edition"/>
+        <result column="B_CATEGORY_FIRST" jdbcType="VARCHAR" property="categoryFirst"/>
+        <result column="B_CATEGORY_SECOND" jdbcType="VARCHAR"
+                property="categorySecond"/>
+        <result column="B_CATEGORY_THIRD" jdbcType="VARCHAR" property="categoryThird"/>
+        <result column="B_AUTHOR" jdbcType="VARCHAR" property="author"/>
+        <result column="B_AUTHOR_MECHANISM" jdbcType="VARCHAR"
+                property="authorMechanism"/>
+        <result column="B_TRANSLATION_AUTHOR" jdbcType="VARCHAR"
+                property="translationAuthor"/>
+        <result column="B_PRICE" jdbcType="VARCHAR" property="price"/>
+        <result column="B_PAGES" jdbcType="VARCHAR" property="pages"/>
+        <result column="B_SIZE" jdbcType="VARCHAR" property="size"/>
+        <result column="B_LANG" jdbcType="VARCHAR" property="lang"/>
+        <result column="B_TYPE_NUM" jdbcType="INTEGER" property="typeNum"/>
+        <result column="B_SUMMARY" jdbcType="VARCHAR" property="summary"/>
+        <result column="B_FOREIGN_SUMMARY" jdbcType="VARCHAR"
+                property="foreignSummary"/>
+        <result column="B_PUB_TIME" jdbcType="VARCHAR" property="pubtime"/>
+        <result column="B_PUBLISHER" jdbcType="VARCHAR" property="publisher"/>
+        <result column="B_DOI" jdbcType="VARCHAR" property="doi"/>
+        <result column="B_KEY" jdbcType="VARCHAR" property="key"/>
+        <result column="B_SERIES" jdbcType="VARCHAR" property="series"/>
+        <result column="B_VOLUME" jdbcType="VARCHAR" property="volume"/>
+        <result column="B_COVER" jdbcType="VARCHAR" property="cover"/>
+        <result column="B_MARK" jdbcType="VARCHAR" property="mark"/>
+        <result column="B_CLAIM_NUMBER" jdbcType="VARCHAR" property="claimNumber"/>
+        <result column="B_VIEW" jdbcType="BIGINT" property="view"/>
+        <result column="B_BORROW" jdbcType="BIGINT" property="borrow"/>
+        <result column="B_TYPE_NUM_ADD" jdbcType="VARCHAR" property="typeNumAdd"/>
+        <result column="B_ISSN" jdbcType="VARCHAR" property="issn"/>
+        <result column="B_EBOOK" jdbcType="VARCHAR" property="ebook"/>
+        <result column="B_CHAPTER" jdbcType="VARCHAR" property="chapter"/>
+        <result column="B_DEPARTMENT" jdbcType="VARCHAR" property="department"/>
+        <result column="B_ASTERISK" jdbcType="VARCHAR" property="asterisk"/>
+        <result column="B_METTING" jdbcType="VARCHAR" property="meeting"/>
+        <result column="B_OTHER_URL" jdbcType="VARCHAR" property="otherUrl"/>
+        <result column="B_HTML_URL" jdbcType="VARCHAR" property="htmlUrl"/>
+        <result column="B_CTRL_NUM" jdbcType="VARCHAR" property="ctrlNum"/>
+        <result column="B_SOURCE" jdbcType="VARCHAR" property="bookSource"/>
+        <result column="B_BSZZ" jdbcType="VARCHAR" property="bszz"/>
+        <result column="B_ISBN2" jdbcType="VARCHAR" property="isbn2"/>
+        <result column="B_CATEGORY2" jdbcType="VARCHAR" property="category2"/>
+
+        <result column="row" jdbcType="INTEGER" property="row"/>
+    </resultMap>
+
+    <sql id="columns">B_ID, B_CREATETIME, B_UPDATETIME, B_ISBN, B_NAME, B_FOREIGN_NAME, B_EDITION, B_CATEGORY_FIRST, B_CATEGORY_SECOND, B_CATEGORY_THIRD, B_AUTHOR, B_AUTHOR_MECHANISM, B_TRANSLATION_AUTHOR, B_PRICE, B_PAGES, B_SIZE , B_LANG , B_TYPE_NUM , B_SUMMARY , B_FOREIGN_SUMMARY , B_PUB_TIME , B_PUBLISHER , B_DOI , B_KEY , B_SERIES , B_VOLUME , B_COVER , B_MARK , B_CLAIM_NUMBER , B_VIEW , B_BORROW , B_TYPE_NUM_ADD , B_ISSN , B_EBOOK , B_CHAPTER , B_DEPARTMENT , B_ASTERISK, B_METTING, B_OTHER_URL, B_HTML_URL, B_CTRL_NUM, B_SOURCE, B_BSZZ, B_ISBN2, B_CATEGORY2
+	</sql>
+
+    <sql id="columns2">B_CREATETIME, B_UPDATETIME, B_ISBN, B_NAME, B_FOREIGN_NAME, B_EDITION, B_CATEGORY_FIRST , B_CATEGORY_SECOND, B_CATEGORY_THIRD, B_AUTHOR, B_AUTHOR_MECHANISM, B_TRANSLATION_AUTHOR , B_PRICE , B_PAGES , B_SIZE , B_LANG , B_TYPE_NUM , B_SUMMARY , B_FOREIGN_SUMMARY , B_PUB_TIME , B_PUBLISHER , B_DOI , B_KEY , B_SERIES , B_VOLUME , B_COVER , B_MARK , B_CLAIM_NUMBER , B_VIEW , B_BORROW , B_TYPE_NUM_ADD , B_ISSN , B_EBOOK , B_CHAPTER , B_DEPARTMENT , B_ASTERISK , B_METTING , B_OTHER_URL , B_HTML_URL , B_CTRL_NUM , B_SOURCE , B_BSZZ , B_ISBN2 , B_CATEGORY2
+    </sql>
+
+    <select id="selectOne" parameterType="Map" resultMap="BookResult">
+        SELECT
+        <include refid="columns"/>
+        FROM fun_book
+        <where>
+            <if test="bid != null">
+                b_id = #{bid}
+            </if>
+        </where>
+    </select>
+
+    <select id="search" parameterType="cn.com.miaoto.modules.book.model.BookSearchReq" resultMap="BookResult">
+        select
+        *
+        FROM (
+        SELECT
+        *, ROW_NUMBER() OVER (ORDER BY ${searchFilter.sidx} ${searchFilter.sord}) AS row FROM fun_book
+        <where>
+            <if test="book.isbn != null and book.isbn !=''">
+                <bind name="isbnBind" value="'%' + book.isbn + '%'"/>
+                (b_isbn LIKE #{isbnBind} OR b_isbn2 LIKE #{isbnBind} OR b_issn LIKE #{isbnBind})
+            </if>
+            <if test="book.name != null and book.name !=''">
+                <bind name="nameBind" value="'%' + book.name + '%'"/>
+                AND (b_name LIKE #{nameBind} OR b_foreign_name LIKE #{nameBind})
+            </if>
+            <if test="book.author != null and book.author !=''">
+                <bind name="authorBind" value="'%' + book.author + '%'"/>
+                AND b_author LIKE #{authorBind}
+            </if>
+            <if test="book.categoryThird != null and book.categoryThird !=''">
+                <bind name="categoryThirdBind" value="'%' + book.categoryThird + '%'"/>
+                AND b_category_third LIKE #{categoryThirdBind}
+            </if>
+            <if test="book.claimNumber != null and book.claimNumber !=''">
+                <bind name="claimNumberBind" value="'%' +book.claimNumber + '%'"/>
+                AND b_claim_number LIKE #{claimNumberBind}
+            </if>
+            <if test="book.publisher != null and book.publisher !=''">
+                <bind name="publisherBind" value="'%' + book.publisher + '%'"/>
+                AND b_publisher LIKE #{publisherBind}
+            </if>
+            <if test="book.pubtime != null and book.pubtime !=''">
+                <bind name="pubtimeBind" value="'%' + book.pubtime + '%'"/>
+                AND b_pub_time LIKE #{pubtimeBind}
+            </if>
+            <if test="book.series != null and book.series !=''">
+                <bind name="seriesBind" value="'%' + book.series + '%'"/>
+                AND b_series LIKE #{seriesBind}
+            </if>
+        </where>
+        ) a
+        <where>
+            row &gt; #{searchFilter.begin} and row &lt;= #{searchFilter.end}
+        </where>
+    </select>
+
+    <select id="searchCount" parameterType="cn.com.miaoto.modules.book.model.BookSearchReq" resultType="INTEGER">
+        SELECT count(1) FROM fun_book
+        <where>
+            <if test="book.isbn != null and book.isbn !=''">
+                <bind name="isbnBind" value="'%' + book.isbn + '%'"/>
+                (b_isbn LIKE #{isbnBind} OR b_isbn2 LIKE #{isbnBind} OR b_issn LIKE #{isbnBind})
+            </if>
+            <if test="book.name != null and book.name !=''">
+                <bind name="nameBind" value="'%' + book.name + '%'"/>
+                AND (b_name LIKE #{nameBind} OR b_foreign_name LIKE #{nameBind})
+            </if>
+            <if test="book.author != null and book.author !=''">
+                <bind name="authorBind" value="'%' + book.author + '%'"/>
+                AND b_author LIKE #{authorBind}
+            </if>
+            <if test="book.categoryThird != null and book.categoryThird !=''">
+                <bind name="categoryThirdBind" value="'%' + book.categoryThird + '%'"/>
+                AND b_category_third LIKE #{categoryThirdBind}
+            </if>
+            <if test="book.claimNumber != null and book.claimNumber !=''">
+                <bind name="claimNumberBind" value="'%' +book.claimNumber + '%'"/>
+                AND b_claim_number LIKE #{claimNumberBind}
+            </if>
+            <if test="book.publisher != null and book.publisher !=''">
+                <bind name="publisherBind" value="'%' + book.publisher + '%'"/>
+                AND b_publisher LIKE #{publisherBind}
+            </if>
+            <if test="book.pubtime != null and book.pubtime !=''">
+                <bind name="pubtimeBind" value="'%' + book.pubtime + '%'"/>
+                AND b_pub_time LIKE #{pubtimeBind}
+            </if>
+            <if test="book.series != null and book.series !=''">
+                <bind name="seriesBind" value="'%' + book.series + '%'"/>
+                AND b_series LIKE #{seriesBind}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="Book" useGeneratedKeys="true" keyProperty="bid">
+        INSERT INTO fun_book(
+        <include refid="columns2"/>
+        ) VALUES (#{createtime}, #{updatetime}, #{isbn}, #{name}, #{foreignName}, #{edition},
+        #{ categoryFirst }, #{ categorySecond }, #{ categoryThird }, #{ author }, #{ authorMechanism },
+        #{ translationAuthor }, #{ price }, #{ pages }, #{ size }, #{ lang }, #{ typeNum },
+        #{ summary }, #{ foreignSummary }, #{ pubtime }, #{ publisher }, #{ doi }, #{ key },
+        #{ series }, #{ volume }, #{ cover }, #{ mark }, #{ claimNumber }, #{ view }, #{ borrow },
+        #{ typeNumAdd }, #{ issn }, #{ ebook }, #{ chapter }, #{ department }, #{ asterisk },
+        #{ meeting }, #{ otherUrl }, #{ htmlUrl }, #{ ctrlNum }, #{ bookSource }, #{ bszz }, #{ isbn2 },
+        #{ category2})
+    </insert>
+
+    <select id="queryTypeNum" parameterType="Map" resultType="INTEGER">
+        SELECT MAX(b_type_num) FROM fun_book WHERE b_category_third = #{category}
+    </select>
+
+    <update id="update" parameterType="Book">
+        UPDATE fun_book
+        <set>
+            <if test="isbn != null">b_isbn=#{isbn},</if>
+            <if test="name != null">b_name=#{name},</if>
+            <if test="foreignName != null">b_foreign_name=#{foreignName},</if>
+            <if test="edition != null">b_edition=#{edition},</if>
+            <if test="categoryThird != null">b_category_third=#{categoryThird},</if>
+            <if test="author != null">b_author=#{author},</if>
+            <if test="authorMechanism != null">b_author_mechanism=#{authorMechanism},</if>
+            <if test="translationAuthor != null">b_translation_author=#{translationAuthor},</if>
+            <if test="price != null">b_price=#{price},</if>
+            <if test="pages != null">b_pages=#{pages},</if>
+            <if test="size != null">b_size=#{size},</if>
+            <if test="lang != null">b_lang=#{lang},</if>
+            <if test="typeNum != null">b_type_num=#{typeNum},</if>
+            <if test="summary != null">b_summary=#{summary},</if>
+            <if test="foreignSummary != null">b_foreign_summary=#{foreignSummary},</if>
+            <if test="pubtime != null">b_pub_time=#{pubtime},</if>
+            <if test="publisher != null">b_publisher=#{publisher},</if>
+            <if test="doi != null">b_doi=#{doi},</if>
+            <if test="key != null">b_key=#{key},</if>
+            <if test="series != null">b_series=#{series},</if>
+            <if test="volume != null">b_volume=#{volume},</if>
+            <if test="cover != null">b_cover=#{cover},</if>
+            <if test="mark != null">b_mark=#{mark},</if>
+            <if test="claimNumber != null">b_claim_number=#{claimNumber},</if>
+            <if test="typeNumAdd != null">b_type_num_add=#{typeNumAdd},</if>
+            <if test="issn != null">b_issn=#{issn},</if>
+            <if test="ebook != null">b_ebook=#{ebook},</if>
+            <if test="chapter != null">b_chapter=#{chapter},</if>
+            <if test="department != null">b_department=#{department},</if>
+            <if test="asterisk != null">b_asterisk=#{asterisk},</if>
+            <if test="meeting != null">b_metting=#{meeting},</if>
+            <if test="otherUrl != null">b_other_url=#{otherUrl},</if>
+            <if test="htmlUrl != null">b_html_url=#{htmlUrl},</if>
+            <if test="bookSource != null">b_source=#{bookSource},</if>
+            <if test="bszz != null">b_bszz=#{bszz},</if>
+            <if test="isbn2 != null">b_isbn2=#{isbn2},</if>
+            <if test="category2 != null">b_category2=#{category2},</if>
+            b_updatetime = GETDATE()
+        </set>
+        WHERE b_id=#{bid}
+    </update>
+
+    <select id="selectHot" parameterType="Map" resultMap="BookResult">
+        select * FROM (
+        SELECT *, ROW_NUMBER() OVER (ORDER BY b_view desc) AS row FROM fun_book
+        ) a
+        <where>
+            row &gt; 0 and row &lt;= 5
+        </where>
+    </select>
+
+    <select id="selectHotBorrow" parameterType="Map" resultMap="BookResult">
+        select * FROM (
+        SELECT *, ROW_NUMBER() OVER (ORDER BY b_borrow desc) AS row FROM fun_book
+        ) a
+        <where>
+            row &gt; 0 and row &lt;= 5
+        </where>
+    </select>
+
+    <update id="updateStats" parameterType="Book">
+        UPDATE fun_book
+        <set>
+            <if test="view != null">b_view=#{view},</if>
+            <if test="borrow != null">b_borrow=#{borrow},</if>
+        </set>
+        WHERE b_id=#{bid}
+    </update>
+
+    <select id="fuzzySearch" parameterType="cn.com.miaoto.modules.book.model.FuzzySearchReq" resultMap="BookResult">
+        SELECT
+        *
+        FROM (
+        SELECT
+        *, ROW_NUMBER() OVER (ORDER BY ${searchFilter.sidx} ${searchFilter.sord}) AS row FROM fun_book
+        <where>
+            CONTAINS(${bookNameSearch})
+        </where>
+        ) a
+        <where>
+            row &gt; #{searchFilter.begin} AND row &lt;= #{searchFilter.end}
+        </where>
+    </select>
+
+    <select id="fuzzyCount" parameterType="cn.com.miaoto.modules.book.model.FuzzySearchReq"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM fun_book where CONTAINS(${bookNameSearch})
+    </select>
+</mapper>

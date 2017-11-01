@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="RolePermission">
+
+    <resultMap type="cn.com.miaoto.pojo.RolePermission" id="RoleResult">
+        <id column="RP_ID" jdbcType="INTEGER" property="rpid"/>
+        <result column="RP_RID" jdbcType="VARCHAR" property="rpRid"/>
+        <result column="RP_PID" jdbcType="VARCHAR" property="rpPid"/>
+        <result column="RP_CREATETIME" jdbcType="DATE" property="rpCreatetime"/>
+        <result column="RP_UPDATETIME" jdbcType="DATE" property="rpUpdatetime"/>
+    </resultMap>
+
+    <sql id="columns">RP_ID, RP_RID, RP_PID, RP_CREATETIME, RP_UPDATETIME
+    </sql>
+
+    <sql id="columns2">RP_RID, RP_PID, RP_CREATETIME, RP_UPDATETIME
+    </sql>
+
+    <insert id="insert" parameterType="java.util.List">
+        INSERT INTO sys_role_permission(
+        <include refid="columns2"/>
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.rpRid}, #{item.rpPid}, GETDATE(), GETDATE() )
+        </foreach>
+    </insert>
+
+    <insert id="banchInsert" parameterType="cn.com.miaoto.modules.role.model.AddRolePermissionReq"
+            useGeneratedKeys="true" keyProperty="urid">
+        INSERT INTO sys_role_permission(
+        <include refid="columns2"/>
+        ) VALUES
+        <foreach collection="pidList" item="item" separator=",">
+            (#{rid}, #{item}, GETDATE(), GETDATE() )
+        </foreach>
+    </insert>
+
+    <delete id="delete" parameterType="RolePermission">
+        DELETE FROM sys_role_permission
+        <where>
+            <if test="rpRid != null">
+                rp_rid = #{rpRid}
+            </if>
+        </where>
+    </delete>
+</mapper>

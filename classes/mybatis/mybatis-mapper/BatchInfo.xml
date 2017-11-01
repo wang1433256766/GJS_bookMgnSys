@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BatchInfo">
+
+    <resultMap type="BatchInfo" id="BatchInfoResult">
+        <id column="BI_ID" jdbcType="INTEGER" property="biid"/>
+        <result column="BI_TIME" jdbcType="DATE" property="createtime"/>
+        <result column="BI_MARK" jdbcType="VARCHAR" property="mark"/>
+    </resultMap>
+
+    <sql id="columns">BI_ID, BI_TIME,BI_MARK
+    </sql>
+
+    <sql id="columns2"> BI_TIME,BI_MARK
+    </sql>
+
+    <select id="selectAll" parameterType="Map" resultMap="BatchInfoResult">
+        SELECT
+        <include refid="columns"/>
+        FROM fun_batch_info ORDER BY bi_time DESC
+    </select>
+
+    <insert id="insert" parameterType="BatchInfo" useGeneratedKeys="true" keyProperty="biid">
+        INSERT INTO fun_batch_info(
+        <include refid="columns2"/>
+        ) VALUES (GETDATE(), #{mark})
+    </insert>
+
+    <select id="select" parameterType="Map" resultMap="BatchInfoResult">
+        SELECT
+        <include refid="columns"/>
+        FROM fun_batch_info
+        <where>
+            <if test="batchId != null">
+                bi_id = #{batchId}
+            </if>
+        </where>
+    </select>
+</mapper>

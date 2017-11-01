@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BookEntity">
+
+    <resultMap type="cn.com.miaoto.pojo.BookEntity" id="BookEntityResult">
+        <id column="BE_ID" jdbcType="INTEGER" property="beid"/>
+        <result column="BE_BID" jdbcType="INTEGER" property="bid"/>
+        <result column="BE_BARCODE" jdbcType="BIGINT" property="barcode"/>
+        <result column="BE_STATUS" jdbcType="INTEGER" property="status"/>
+        <result column="BE_BM_UID" jdbcType="INTEGER" property="bmUid"/>
+        <result column="BE_SM_UID" jdbcType="INTEGER" property="smUid"/>
+        <result column="BE_TYPE" jdbcType="VARCHAR" property="betype"/>
+        <result column="BE_MARK" jdbcType="VARCHAR" property="bemark"/>
+        <result column="BE_BATCH_ID" jdbcType="INTEGER" property="batchId"/>
+        <result column="BE_BATCH_PRICE" jdbcType="VARCHAR" property="batchPrice"/>
+        <result column="BE_SM_TIME" jdbcType="DATE" property="smTime"/>
+        <result column="BE_BM_TIME" jdbcType="DATE" property="bmTime"/>
+        <result column="BE_LOSTER" jdbcType="INTEGER" property="loster"/>
+        <result column="BE_UPDATETIME" jdbcType="DATE" property="updatetime"/>
+        <result column="BE_CTRL_NUM" jdbcType="VARCHAR" property="ctrlNum"/>
+        <result column="BE_SOURCE" jdbcType="VARCHAR" property="beSource"/>
+        <result column="BE_INSERT_TYPE" jdbcType="INTEGER" property="insertType"/>
+
+        <result column="FO_STATUS" jdbcType="INTEGER" property="followStatus"/>
+        <result column="maxRow" jdbcType="INTEGER" property="maxRow"/>
+        <result column="U_NAME" jdbcType="VARCHAR" property="losterName"/>
+        <result column="BI_MARK" jdbcType="VARCHAR" property="batchMark"/>
+        <association property="book" resultMap="BookResult"/>
+    </resultMap>
+
+    <resultMap type="cn.com.miaoto.pojo.Book" id="BookResult">
+        <id column="B_ID" jdbcType="INTEGER" property="bid"/>
+        <result column="B_CREATETIME" jdbcType="DATE" property="createtime"/>
+        <result column="B_UPDATETIME" jdbcType="DATE" property="updatetime"/>
+        <result column="B_ISBN" jdbcType="VARCHAR" property="isbn"/>
+        <result column="B_NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="B_FOREIGN_NAME" jdbcType="VARCHAR" property="foreignName"/>
+        <result column="B_EDITION" jdbcType="VARCHAR" property="edition"/>
+        <result column="B_CATEGORY_FIRST" jdbcType="VARCHAR" property="categoryFirst"/>
+        <result column="B_CATEGORY_SECOND" jdbcType="VARCHAR"
+                property="categorySecond"/>
+        <result column="B_CATEGORY_THIRD" jdbcType="VARCHAR" property="categoryThird"/>
+        <result column="B_AUTHOR" jdbcType="VARCHAR" property="author"/>
+        <result column="B_AUTHOR_MECHANISM" jdbcType="VARCHAR"
+                property="authorMechanism"/>
+        <result column="B_TRANSLATION_AUTHOR" jdbcType="VARCHAR"
+                property="translationAuthor"/>
+        <result column="B_PRICE" jdbcType="VARCHAR" property="price"/>
+        <result column="B_PAGES" jdbcType="VARCHAR" property="pages"/>
+        <result column="B_SIZE" jdbcType="VARCHAR" property="size"/>
+        <result column="B_LANG" jdbcType="VARCHAR" property="lang"/>
+        <result column="B_TYPE_NUM" jdbcType="INTEGER" property="typeNum"/>
+        <result column="B_SUMMARY" jdbcType="VARCHAR" property="summary"/>
+        <result column="B_FOREIGN_SUMMARY" jdbcType="VARCHAR"
+                property="foreignSummary"/>
+        <result column="B_PUB_TIME" jdbcType="VARCHAR" property="pubtime"/>
+        <result column="B_PUBLISHER" jdbcType="VARCHAR" property="publisher"/>
+        <result column="B_DOI" jdbcType="VARCHAR" property="doi"/>
+        <result column="B_KEY" jdbcType="VARCHAR" property="key"/>
+        <result column="B_SERIES" jdbcType="VARCHAR" property="series"/>
+        <result column="B_VOLUME" jdbcType="VARCHAR" property="volume"/>
+        <result column="B_COVER" jdbcType="VARCHAR" property="cover"/>
+        <result column="B_MARK" jdbcType="VARCHAR" property="mark"/>
+        <result column="B_CLAIM_NUMBER" jdbcType="VARCHAR" property="claimNumber"/>
+        <result column="B_VIEW" jdbcType="BIGINT" property="view"/>
+        <result column="B_BORROW" jdbcType="BIGINT" property="borrow"/>
+        <result column="B_TYPE_NUM_ADD" jdbcType="VARCHAR" property="typeNumAdd"/>
+        <result column="B_ISSN" jdbcType="VARCHAR" property="issn"/>
+        <result column="B_EBOOK" jdbcType="VARCHAR" property="ebook"/>
+        <result column="B_CHAPTER" jdbcType="VARCHAR" property="chapter"/>
+        <result column="B_DEPARTMENT" jdbcType="VARCHAR" property="department"/>
+        <result column="B_ASTERISK" jdbcType="VARCHAR" property="asterisk"/>
+        <result column="B_METTING" jdbcType="VARCHAR" property="meeting"/>
+        <result column="B_OTHER_URL" jdbcType="VARCHAR" property="otherUrl"/>
+        <result column="B_HTML_URL" jdbcType="VARCHAR" property="htmlUrl"/>
+        <result column="B_CTRL_NUM" jdbcType="VARCHAR" property="ctrlNum"/>
+        <result column="B_SOURCE" jdbcType="VARCHAR" property="bookSource"/>
+        <result column="B_BSZZ" jdbcType="VARCHAR" property="bszz"/>
+        <result column="B_ISBN2" jdbcType="VARCHAR" property="isbn2"/>
+        <result column="B_CATEGORY2" jdbcType="VARCHAR" property="category2"/>
+
+        <result column="row" jdbcType="INTEGER" property="row"/>
+    </resultMap>
+
+    <sql id="columns"> BE_ID, BE_BID, BE_BARCODE, BE_STATUS, BE_BM_UID, BE_SM_UID, BE_TYPE, BE_MARK, BE_BATCH_PRICE, BE_BATCH_ID, BE_SM_TIME, BE_BM_TIME, BE_LOSTER, BE_UPDATETIME, BE_CTRL_NUM, BE_SOURCE, BE_INSERT_TYPE
+    </sql>
+
+    <sql id="columns2">BE_BID, BE_BARCODE, BE_STATUS, BE_BM_UID, BE_SM_UID, BE_TYPE, BE_MARK, BE_BATCH_PRICE, BE_BATCH_ID, BE_SM_TIME, BE_BM_TIME, BE_LOSTER, BE_UPDATETIME, BE_CTRL_NUM, BE_SOURCE, BE_INSERT_TYPE
+    </sql>
+
+    <sql id="columns3">BE_ID, BE_BID, BE_BARCODE, BE_STATUS, BE_BM_UID, BE_SM_UID, BE_TYPE, BE_MARK, BE_BATCH_PRICE, BE_BATCH_ID  , BE_SM_TIME, BE_BM_TIME, BE_LOSTER, BE_UPDATETIME, BE_CTRL_NUM, BE_SOURCE, BE_INSERT_TYPE, B_ID, B_CREATETIME, B_UPDATETIME, B_ISBN, B_NAME, B_FOREIGN_NAME, B_EDITION, B_CATEGORY_FIRST, B_CATEGORY_SECOND, B_CATEGORY_THIRD, B_AUTHOR, B_AUTHOR_MECHANISM, B_TRANSLATION_AUTHOR, B_PRICE, B_PAGES, B_SIZE , B_LANG , B_TYPE_NUM , B_SUMMARY , B_FOREIGN_SUMMARY , B_PUB_TIME , B_PUBLISHER , B_DOI , B_KEY , B_SERIES , B_VOLUME , B_COVER , B_MARK , B_CLAIM_NUMBER , B_VIEW , B_BORROW , B_TYPE_NUM_ADD , B_ISSN , B_EBOOK , B_CHAPTER , B_DEPARTMENT , B_ASTERISK, B_METTING, B_OTHER_URL, B_HTML_URL, B_CTRL_NUM, B_SOURCE, B_BSZZ, B_ISBN2, B_CATEGORY2
+    </sql>
+
+    <select id="selectOne" parameterType="Map" resultMap="BookEntityResult">
+        SELECT
+        <include refid="columns"/>
+        <!--<if test="queryUid != null">-->
+        <!--, fo_status-->
+        <!--</if>-->
+        FROM fun_book_entity
+        <!--<if test="queryUid != null">-->
+        <!--LEFT JOIN fun_follow t ON fo_uid = #{queryUid}-->
+        <!--</if>-->
+        <where>
+            <if test="barCode != null">
+                be_barcode = #{barCode}
+            </if>
+            <if test="bid != null">
+                AND be_bid = #{bid}
+            </if>
+            <if test="beid != null">
+                AND be_id = #{beid}
+            </if>
+            <if test="batchId != null">
+                AND be_batch_id = #{batchId}
+            </if>
+            <!--<if test="queryUid != null">-->
+            <!--AND NOT EXISTS(SELECT * FROM fun_follow WHERE fo_createtime>t.fo_createtime)-->
+            <!--</if>-->
+        </where>
+    </select>
+
+    <select id="select" parameterType="Map" resultMap="BookEntityResult">
+        SELECT
+        <include refid="columns3"/>
+        FROM fun_book_entity LEFT JOIN fun_book ON fun_book.b_id = fun_book_entity.be_bid
+        <where>
+            <if test="barCode != null">
+                be_barcode = #{barCode}
+            </if>
+            <if test="bid != null">
+                be_bid = #{bid}
+            </if>
+            <if test="beid != null">
+                be_id = #{beid}
+            </if>
+            <if test="batchId != null">
+                be_batch_id = #{batchId}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateBookStatus" parameterType="Map">
+        UPDATE fun_book_entity
+        <set>
+            <if test="status != null">be_status=#{status},</if>
+        </set>
+        WHERE be_barcode=#{barCode}
+    </update>
+
+    <select id="selectCount" parameterType="Map" resultType="INTEGER">
+        SELECT COUNT(*) FROM fun_book_entity
+        <where>
+            <if test="bid != null">
+                be_bid = #{bid}
+            </if>
+            <if test="status != null">
+                AND be_status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="BookEntity" useGeneratedKeys="true" keyProperty="beid">
+        INSERT INTO fun_book_entity(
+        <include refid="columns2"/>
+        ) VALUES ( #{ bid  }, #{ barcode  }, #{ status  }, #{ bmUid  }, #{ smUid  },
+        #{ betype  }, #{ bemark  }, #{ batchPrice  }, #{ batchId  }, #{ smTime  }, #{ bmTime  },
+        #{ loster }, #{ updatetime  }, #{ ctrlNum  }, #{ beSource }, #{ insertType })
+    </insert>
+
+    <select id="queryMaxBarCode" parameterType="Map" resultType="java.lang.Long">
+        SELECT MAX(be_barcode) FROM fun_book_entity
+        <if test="foreign == true">
+            WHERE be_barcode > #{start}
+        </if>
+        <if test="foreign == false">
+            WHERE be_barcode &lt; #{start}
+        </if>
+    </select>
+
+    <select id="queryUncheck" parameterType="Map" resultMap="BookEntityResult">
+        SELECT
+        <include refid="columns3"/>, bi_mark
+        FROM fun_book_entity
+        LEFT JOIN fun_book ON fun_book.b_id = fun_book_entity.be_bid
+        LEFT JOIN fun_batch_info ON fun_book_entity.be_batch_id = fun_batch_info.bi_id
+        WHERE be_status = #{status}
+    </select>
+
+    <update id="update" parameterType="BookEntity">
+        UPDATE fun_book_entity
+        <set>
+            be_updatetime = GETDATE(),
+            <if test="bid != null">be_bid=#{bid},</if>
+            <if test="barcode != null">be_barcode=#{barcode},</if>
+            <if test="status != null">be_status=#{status},</if>
+            <if test="bmUid != null">be_bm_uid=#{bmUid},</if>
+            <if test="smUid != null">be_sm_uid=#{smUid},</if>
+            <if test="betype != null">be_type=#{betype},</if>
+            <if test="bemark != null">be_mark=#{bemark},</if>
+            <if test="batchPrice != null">be_batch_price=#{batchPrice},</if>
+            <if test="batchId != null">be_batch_id=#{batchId},</if>
+            <if test="smTime != null">be_sm_time=#{smTime},</if>
+            <if test="loster != null">be_loster=#{loster},</if>
+            <if test="updatetime != null">be_updatetime=#{updatetime},</if>
+            <if test="ctrlNum != null">be_ctrl_num=#{ctrlNum},</if>
+            <if test="beSource != null">be_source=#{beSource},</if>
+        </set>
+        <where>
+            <if test="beid != null">
+                be_id=#{beid}
+            </if>
+            <if test="beidList != null">
+                AND be_id IN
+                <foreach item="item" index="index" collection="beidList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </update>
+
+    <select id="selectAll" parameterType="cn.com.miaoto.modules.book.model.GetAllBookEntityReq"
+            resultMap="BookEntityResult">
+        SELECT * FROM (
+        SELECT<include refid="columns3"/>, U_NAME, ROW_NUMBER() OVER (ORDER BY ${searchFilter.sidx}
+        ${searchFilter.sord}) AS row
+        FROM fun_book_entity
+        LEFT JOIN fun_book ON fun_book.b_id = fun_book_entity.be_bid
+        LEFT JOIN sys_user ON fun_book_entity.be_loster = sys_user.u_id
+        <where>
+            <if test="book.isbn != null">
+                <bind name="isbnBind" value="'%' + book.isbn + '%'"/>
+                b_isbn LIKE #{isbnBind}
+            </if>
+            <if test="book.name != null">
+                <bind name="nameBind" value="'%' + book.name + '%'"/>
+                AND b_name LIKE #{nameBind}
+            </if>
+            <if test="bookEntity.barcode != null">
+                <bind name="isbarcode" value="'%' + bookEntity.barcode + '%'"/>
+                AND be_barcode = #{isbarcode}
+            </if>
+            <if test="bookEntity.status != null">
+                <bind name="isstatus" value="'%' + bookEntity.status + '%'"/>
+                AND be_status LIKE #{isstatus}
+            </if>
+            <if test="bookEntity.statusList != null">
+                AND be_status IN
+                <foreach item="item" index="index" collection="bookEntity.statusList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+
+        ) a
+        <where>
+            row &gt; #{searchFilter.begin} AND row &lt;= #{searchFilter.end}
+        </where>
+    </select>
+
+    <select id="selectNew" parameterType="Map" resultMap="BookEntityResult">
+        SELECT * FROM (
+        SELECT<include refid="columns3"/>, ROW_NUMBER() OVER (ORDER BY be_sm_time desc) AS row FROM fun_book_entity
+        LEFT JOIN fun_book ON fun_book.b_id = fun_book_entity.be_bid
+        ) a
+        <where>
+            row &gt; 0 AND row &lt;= 5
+        </where>
+    </select>
+
+    <select id="selectSearchCount" parameterType="cn.com.miaoto.modules.book.model.GetAllBookEntityReq"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM fun_book_entity
+        LEFT JOIN fun_book ON fun_book.b_id = fun_book_entity.be_bid
+        <where>
+            <if test="book.isbn != null">
+                <bind name="isbnBind" value="'%' + book.isbn + '%'"/>
+                b_isbn LIKE #{isbnBind}
+            </if>
+            <if test="book.name != null">
+                <bind name="nameBind" value="'%' + book.name + '%'"/>
+                AND b_name LIKE #{nameBind}
+            </if>
+            <if test="bookEntity.barcode != null">
+                <bind name="isbarcode" value="'%' + bookEntity.barcode + '%'"/>
+                AND be_barcode = #{isbarcode}
+            </if>
+            <if test="bookEntity.status != null">
+                <bind name="isstatus" value="'%' + bookEntity.status + '%'"/>
+                AND be_status LIKE #{isstatus}
+            </if>
+            <if test="bookEntity.statusList != null">
+                AND be_status IN
+                <foreach item="item" index="index" collection="bookEntity.statusList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

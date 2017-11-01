@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Borrow">
+
+    <resultMap type="Borrow" id="BorrowResult">
+        <id column="BO_ID" jdbcType="INTEGER" property="boid"/>
+        <result column="BO_BEID" jdbcType="BIGINT" property="beid"/>
+        <result column="BO_UID" jdbcType="INTEGER" property="uid"/>
+        <result column="BO_CREATETIME" jdbcType="DATE" property="createtime"/>
+        <result column="BO_RENEWAL" jdbcType="INTEGER" property="renewal"/>
+        <result column="BO_BORROW_ADMIN" jdbcType="INTEGER" property="borrow"/>
+        <result column="BO_BACK_ADMIN" jdbcType="INTEGER" property="backUid"/>
+        <result column="BO_BACKTIME" jdbcType="DATE" property="backtime"/>
+        <result column="BO_REALBACK" jdbcType="DATE" property="realback"/>
+        <result column="B_NAME" jdbcType="VARCHAR" property="bookName"/>
+        <result column="U_NAME" jdbcType="VARCHAR" property="userName"/>
+        <result column="U_EMAIL" jdbcType="VARCHAR" property="email"/>
+        <result column="B_AUTHOR" jdbcType="VARCHAR" property="author"/>
+        <result column="B_FOREIGN_NAME" jdbcType="VARCHAR" property="foreignName"/>
+    </resultMap>
+
+    <sql id="columns">BO_BEID, BO_UID, BO_CREATETIME, BO_RENEWAL,
+		BO_BORROW_ADMIN, BO_BACK_ADMIN, BO_BACKTIME, BO_REALBACK
+	</sql>
+
+    <insert id="insert" parameterType="Borrow" useGeneratedKeys="true" keyProperty="boid">
+        INSERT INTO fun_borrowed(
+        <include refid="columns"/>
+        ) VALUES (#{beid}, #{uid}, #{createtime}, 0, #{borrow}, #{backUid}, #{backtime}, #{realback})
+    </insert>
+
+    <select id="selectBorrowedByUser" parameterType="Map" resultMap="BorrowResult">
+        SELECT
+        <include refid="columns"/>, B_NAME, B_AUTHOR, B_FOREIGN_NAME
+        FROM fun_borrowed
+        LEFT JOIN fun_book_entity ON fun_borrowed.bo_beid = fun_book_entity.be_barcode
+        LEFT JOIN fun_book ON fun_book.b_id = fun_book_entity.be_bid
+        WHERE bo_uid = #{uid} AND bo_realback IS NULL
+    </select>
+
+    <update id="backBook" parameterType="Map">
+        UPDATE fun_borrowed
+        <set>
+            <if test="backUid != null">bo_back_admin=#{backUid},</if>
+            <if test="realback != null">bo_realback=#{realback},</if>
+        </set>
+        WHERE bo_beid=#{beid} AND bo_realback IS NULL
+    </update>
+
+    <select id="selectBorrowedByBook" parameterType="Map" resultMap="BorrowResult">
+        SELECT
+        <include refid="columns"/>, sys_user.u_name
+        FROM fun_borrowed
+        LEFT JOIN sys_user ON sys_user.u_id = fun_borrowed.bo_uid
+        WHERE bo_beid = #{barCode} AND bo_realback IS NULL
+    </select>
+
+    <update id="update" parameterType="Borrow">
+        UPDATE fun_borrowed
+        <set>
+            <if test="renewal != null">bo_renewal=#{renewal},</if>
+            <if test="backtime != null">bo_backtime=#{backtime},</if>
+        </set>
+        WHERE bo_beid=#{beid} AND bo_realback IS NULL
+    </update>
+
+    <select id="selectReminder" parameterType="Map" resultMap="BorrowResult">
+        SELECT<include refid="columns"/>, fun_book.b_name, sys_user.u_name, sys_user.u_email
+        FROM fun_borrowed
+        LEFT JOIN fun_book_entity ON fun_borrowed.bo_beid = fun_book_entity.be_barcode
+        LEFT JOIN fun_book ON fun_book.b_id = fun_book_entity.be_bid
+        LEFT JOIN sys_user ON sys_user.u_id = fun_borrowed.bo_uid
+        WHERE bo_backtime > GETDATE()
+        AND bo_realback IS NULL
+    </select>
+
+    <select id="selectReserveFail" parameterType="Map" resultMap="BorrowResult">
+        SELECT fun_borrowed.bo_beid, sys_user.u_name, sys_user.u_email, fun_book.b_name, fun_borrowed.bo_createtime, fun_borrowed.bo_id FROM fun_book_entity LEFT JOIN fun_borrowed ON fun_book_entity.be_barcode = fun_borrowed.bo_beid LEFT JOIN sys_user ON fun_borrowed.bo_uid = sys_user.u_id LEFT JOIN fun_book ON fun_book_entity.be_bid = fun_book.b_id WHERE fun_book_entity.be_status = 3 AND DateDiff(DAY,fun_borrowed.bo_createtime,GETDATE()) > #{day} AND fun_borrowed.bo_realback IS NULL
+    </select>
+
+    <select id="selectAll" parameterType="cn.com.miaoto.modules.borrow.model.GetBorrowInfoReq" resultMap="BorrowResult">
+        SELECT * FROM (
+        SELECT<include refid="columns"/>, fun_book.b_name, fun_book.b_author, fun_book.b_foreign_name, ROW_NUMBER() OVER
+        (ORDER BY
+        ${searchFilter.sidx}
+        ${searchFilter.sord}) AS row
+        FROM fun_borrowed
+        LEFT JOIN fun_book_entity ON fun_book_entity.be_barcode = fun_borrowed.bo_beid LEFT JOIN fun_book ON
+        fun_book_entity.be_bid = fun_book.b_id
+        where bo_uid = #{uid}
+        ) a
+        <where>
+            row &gt; #{searchFilter.begin} AND row &lt;= #{searchFilter.end}
+        </where>
+    </select>
+
+    <select id="count" parameterType="Map" resultType="java.lang.Integer">
+        SELECT count(1) FROM fun_borrowed where bo_uid = #{uid}
+    </select>
+</mapper>

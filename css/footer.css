@@ -1,0 +1,28 @@
+.wrap{
+	padding-bottom:66px;
+}
+.footer{
+	width: 100%;
+	min-width: 1100px;
+	height: 46px;
+	background-color: #d0d0d0;
+	text-align: center;
+	color: #333;
+	line-height: 46px;
+	font-size: 12px;
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	z-index: 999;
+}
+/*.footer{
+	width: 100%;
+	min-width: 1100px;
+	height: 46px;
+	background-color: #d0d0d0;
+	text-align: center;
+	color: #333;
+	line-height: 46px;
+	font-size: 12px;
+	margin-top: 40px;
+}*/

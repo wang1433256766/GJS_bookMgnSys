@@ -1,0 +1,36 @@
+.wrap{
+	width:1100px;
+	margin: 0 auto;
+	/*background-color: #ffffff;*/
+	padding: 20px 30px; 
+	overflow: hidden;
+}
+.introinfo{
+	color: #0066cc;
+	font-size: 16px;
+}
+.introinfo img{
+	vertical-align:middle;
+}
+table{
+	width: 100%;
+	border-collapse:collapse;
+}
+table thead{
+	background-color: #d8d8d8;
+	height: 26px;
+}
+table tr{
+	border: 1px solid #999;
+}
+table th,table td{
+	border: none;
+	text-align: center;
+}
+.selfPage{
+	margin-top: 10px;
+	text-align: center;
+}
+.countNum{
+	padding-left: 100px;
+}

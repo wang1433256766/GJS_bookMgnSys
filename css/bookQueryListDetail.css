@@ -1,0 +1,62 @@
+.wrap{
+	width:1100px;
+	margin: 0 auto;
+	/*background-color: #ffffff;*/
+	padding: 20px 30px; 
+}
+.wrap-top{
+	width: 1040px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+.wrap-top .part-1{
+	width: 160px;
+	float: left;
+}
+.wrap-top .part-2{
+	width: 660px;
+	padding-left: 30px;
+	float: left;
+}
+.wrap-top .part-3{
+	width: 155px;
+	padding-left: 30px;
+	float: left;
+	border-left: 1px solid #eeeeee;
+}
+.wrap-top .part-1 .book-cover, .wrap-top .part-1 .book-cover img{
+	width: 140px;
+	height: 180px;
+}
+.wrap-top .part-2 p{
+	font-weight: bold;
+}
+.wrap-top .part-2 p span{
+	font-weight: normal;
+}
+.wrap-top .part-3 button{
+	filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#4d8ac6,endcolorstr=#35afd0,gradientType=0);
+	background: -ms-linear-gradient(top, #4d8ac6, #35afd0);
+	background: -moz-linear-gradient(top,#4d8ac6,#35afd0);
+	background: -webkit-linear-gradient(top,#4d8ac6,#35afd0);
+	background: -o-linear-gradient(top,#4d8ac6,#35afd0);
+	color: #ffffff;
+	padding: 3px 15px;
+	font-size: 12px;
+}
+table{
+	width: 1000px;
+	margin: 30px auto;
+	border-collapse:collapse;
+}
+table thead{
+	background-color: #d8d8d8;
+	height: 26px;
+}
+table tr{
+	border: 1px solid #999;
+}
+table th,table td{
+	border: none;
+	text-align: center;
+}

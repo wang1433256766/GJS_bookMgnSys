@@ -1,0 +1,116 @@
+.wrap{
+	width:1100px;
+	margin: 0 auto;
+	/*background-color: #ffffff;*/
+	padding: 20px 30px; 
+}
+.section{
+	margin: 25px 25px;
+}
+.section .introinfo{
+	color: #0066cc;
+	font-size: 16px;
+}
+.section .text{
+	margin-left: 15px;
+}
+.section .introinfo img{
+	vertical-align:middle;
+}
+.section .introtext span{
+	color: #f30c0c;
+}
+.section .selfinfo{
+	width: 100%;
+	height: 220px;
+	border: 1px solid #999;
+	background-color: #f7fdff;
+	overflow: hidden;
+}
+.section .selfinfo .selflogo{
+	width: 196px;
+	height: 76px;
+	background-color: #d8d8d8;
+	border-radius: 5px;
+	margin-left: 65px;
+    margin-top: 15px;
+
+}
+.section .selfinfo .selfcode{
+	margin-top: 20px;
+	margin-left: 100px;
+}
+.section .selfinfo .selfstatus{
+	margin-top: 20px;
+	margin-left: 100px;
+}
+.section .selfinfo .selfbtn{
+	margin-top: 25px;
+	margin-left: 10px;
+}
+.part-1,.part-2,.part-3{
+	width: 33%;
+	float: left;
+}
+.row{
+	margin-top: 14px;
+	overflow: hidden;
+}
+.text-left{
+	width: 40%;
+	float: left;
+	text-align: right;
+}
+.text-right{
+	width: 55%;
+	float: left;
+	text-align: left;
+}
+input::-webkit-input-placeholder {
+     /* placeholder颜色  */
+    color: #999;
+    /* placeholder字体大小  */
+    font-size: 12px;
+    padding-left: 5px;
+}
+table{
+	width: 100%;
+	border-collapse:collapse;
+}
+table thead{
+	background-color: #d8d8d8;
+	height: 26px;
+}
+table tr{
+	border: 1px solid #999;
+}
+table th,table td{
+	border: none;
+	text-align: center;
+}
+.row-button{
+	text-align: center;
+	margin-top: 20px;
+}
+.row-button button{
+	filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#4d8ac6,endcolorstr=#35afd0,gradientType=0);
+	background: -ms-linear-gradient(top, #4d8ac6, #35afd0);
+	background: -moz-linear-gradient(top,#4d8ac6,#35afd0);
+	background: -webkit-linear-gradient(top,#4d8ac6,#35afd0);
+	background: -o-linear-gradient(top,#4d8ac6,#35afd0);
+	color: #ffffff;
+	padding: 3px 15px;
+	font-size: 12px;
+}
+.bookname{
+	color: #0000ff;
+}
+.enddate{
+	color: #f30c0c;
+}
+
+#uname{
+	font-weight: bolder;
+	color: #0000ff;
+}
+

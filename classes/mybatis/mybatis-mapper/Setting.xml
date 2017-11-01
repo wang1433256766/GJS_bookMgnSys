@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Setting">
+
+    <resultMap type="cn.com.miaoto.pojo.Setting" id="SettingResult">
+        <id column="S_ID" jdbcType="INTEGER" property="sid"/>
+        <result column="S_KEY" jdbcType="VARCHAR" property="key"/>
+        <result column="S_VALUE" jdbcType="VARCHAR" property="value"/>
+        <result column="S_CREATETIME" jdbcType="DATE" property="createtime"/>
+        <result column="S_UPDATETIME" jdbcType="DATE" property="updatetime"/>
+    </resultMap>
+
+    <sql id="columns">
+        S_ID, S_KEY, S_VALUE, S_CREATETIME, S_UPDATETIME, S_UID
+    </sql>
+
+    <sql id="columns2">
+        S_KEY, S_VALUE, S_CREATETIME, S_UPDATETIME, S_UID
+    </sql>
+
+    <select id="selectAll" parameterType="Map" resultMap="SettingResult">
+        SELECT
+        <include refid="columns"/>
+        FROM sys_setting
+    </select>
+
+    <insert id="insert" parameterType="Setting">
+        INSERT INTO sys_setting(
+        <include refid="columns2"/>
+        ) VALUES (#{key}, N'${value}', GETDATE(), GETDATE(), #{uid})
+    </insert>
+
+    <update id="update" parameterType="Map">
+        UPDATE sys_setting SET s_value = N'${value}' WHERE s_key = #{key}
+    </update>
+
+</mapper>

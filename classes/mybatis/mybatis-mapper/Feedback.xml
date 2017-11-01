@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Feedback">
+
+    <resultMap type="cn.com.miaoto.pojo.Feedback" id="FeedbackResult">
+        <id column="F_ID" jdbcType="INTEGER" property="fid"/>
+        <result column="F_CREATETIME" jdbcType="DATE" property="fdCreatetime"/>
+        <result column="F_UPDATETIME" jdbcType="DATE" property="fdUpdatetime"/>
+        <result column="F_FD_UID" jdbcType="INTEGER" property="fdUid"/>
+        <result column="F_ADMIN_UID" jdbcType="INTEGER" property="adminUid"/>
+        <result column="F_CONTENT" jdbcType="VARCHAR" property="content"/>
+        <result column="F_ADMIN_CONTENT" jdbcType="VARCHAR" property="adminContent"/>
+        <result column="F_IS_EMAIL" jdbcType="VARCHAR" property="isEmail"/>
+        <result column="uname" jdbcType="VARCHAR" property="uname"/>
+    </resultMap>
+
+    <sql id="columns">f_id, f_createtime, f_updatetime, f_fd_uid, f_admin_uid, f_content, f_admin_content, f_is_email
+    </sql>
+
+    <sql id="columns2">f_createtime, f_updatetime, f_fd_uid, f_admin_uid, f_content, f_admin_content, f_is_email
+    </sql>
+
+    <insert id="insert" parameterType="Feedback" useGeneratedKeys="true" keyProperty="fid">
+        INSERT INTO fun_feedback(
+        <include refid="columns2"/>
+        ) VALUES (GETDATE(), GETDATE(), #{fdUid}, #{adminUid}, #{content}, #{adminContent}, #{isEmail})
+    </insert>
+
+    <update id="update" parameterType="Feedback">
+        UPDATE fun_feedback
+        <set>
+            <if test="fdUpdatetime != null">f_updatetime= GETDATE(),</if>
+            <if test="fdUid != null">f_fd_uid=#{fdUid},</if>
+            <if test="adminUid != null">f_admin_uid=#{adminUid},</if>
+            <if test="content != null">f_content=#{content},</if>
+            <if test="adminContent != null">f_admin_content=#{adminContent},</if>
+            <if test="isEmail != null">f_is_email=#{isEmail},</if>
+        </set>
+        WHERE f_id=#{fid}
+    </update>
+
+    <select id="selectAll" parameterType="Map" resultMap="FeedbackResult">
+        SELECT * FROM (
+        SELECT<include refid="columns"/>, sys_user.u_name as uname, ROW_NUMBER() OVER (ORDER BY ${searchFilter.sidx}
+        ${searchFilter.sord}) AS row
+        FROM fun_feedback LEFT JOIN sys_user ON sys_user.u_id = fun_feedback.f_fd_uid
+        <where>
+            <if test="feedback.fdUid != null">
+                f_fd_uid = #{feedback.fdUid}
+            </if>
+        </where>
+        ) a
+        <where>
+            row &gt; #{searchFilter.begin} AND row &lt;= #{searchFilter.end}
+        </where>
+    </select>
+
+    <select id="selectCount" parameterType="Map" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM fun_feedback
+        <where>
+            <if test="feedback.fdUid != null">
+                f_fd_uid = #{feedback.fdUid}
+            </if>
+        </where>
+    </select>
+
+    <select id="select" parameterType="Feedback" resultMap="FeedbackResult">
+        SELECT
+        <include refid="columns"/>, sys_user.u_name as uname
+        FROM fun_feedback LEFT JOIN sys_user ON sys_user.u_id = fun_feedback.f_fd_uid
+        <where>
+            <if test="fid != null">
+                f_id = #{fid}
+            </if>
+        </where>
+    </select>
+</mapper>

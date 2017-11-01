@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Follow">
+
+    <resultMap type="Follow" id="FollowResult">
+        <id column="FO_ID" jdbcType="INTEGER" property="foID"/>
+        <result column="FO_UID" jdbcType="INTEGER" property="foUID"/>
+        <result column="FO_BEID" jdbcType="BIGINT" property="foBeid"/>
+        <result column="FO_STATUS" jdbcType="INTEGER" property="foStatus"/>
+        <result column="FO_CREATETIME" jdbcType="DATE" property="foCreatetime"/>
+        <result column="FO_UPDATETIME" jdbcType="DATE" property="foUpdatetime"/>
+        <result column="U_NAME" jdbcType="VARCHAR" property="uname"/>
+        <result column="U_EMAIL" jdbcType="VARCHAR" property="email"/>
+        <result column="B_NAME" jdbcType="VARCHAR" property="bookName"/>
+        <result column="B_AUTHOR" jdbcType="VARCHAR" property="author"/>
+    </resultMap>
+
+    <sql id="columns">FO_ID, FO_UID, FO_BEID, FO_STATUS, FO_CREATETIME, FO_UPDATETIME
+    </sql>
+
+    <sql id="columns2">FO_UID, FO_BEID, FO_STATUS, FO_CREATETIME, FO_UPDATETIME
+    </sql>
+
+    <insert id="insert" parameterType="Follow" useGeneratedKeys="true" keyProperty="foID">
+        INSERT INTO fun_follow(
+        <include refid="columns2"/>
+        ) VALUES (#{foUID}, #{foBeid}, #{foStatus}, GETDATE(), GETDATE())
+    </insert>
+
+    <select id="searchReminder" parameterType="Follow" resultMap="FollowResult">
+        SELECT<include refid="columns"/>, sys_user.u_name, sys_user.u_email, fun_book.b_name
+        FROM fun_follow
+        LEFT JOIN sys_user ON fun_follow.fo_uid = sys_user.u_id
+        LEFT JOIN fun_book ON fun_book.b_id = fun_follow.fo_beid
+        <where>
+            <if test="foBeid != null">
+                fo_beid = #{foBeid}
+            </if>
+            <if test="foStatus != null">
+                AND fo_status = #{foStatus}
+            </if>
+        </where>
+    </select>
+
+    <select id="searchOwn" parameterType="cn.com.miaoto.modules.follow.model.GetFollowReq" resultMap="FollowResult">
+        SELECT * FROM (
+        SELECT<include refid="columns"/>, fun_book.b_name, fun_book.b_author, ROW_NUMBER() OVER (ORDER BY
+        ${searchFilter.sidx}
+        ${searchFilter.sord}) AS row
+        FROM fun_follow
+        LEFT JOIN fun_book ON fun_book.b_id = fun_follow.fo_beid
+        <where>
+            fo_uid = #{follow.foUID} AND fo_status = 0
+        </where>
+        ) a
+        <where>
+            row &gt; #{searchFilter.begin} AND row &lt;= #{searchFilter.end}
+        </where>
+    </select>
+
+    <update id="update" parameterType="Follow">
+        UPDATE fun_follow
+        <set>
+            <if test="foStatus != null">fo_status=#{foStatus},</if>
+            fo_updatetime = GETDATE()
+        </set>
+        WHERE fo_id=#{foID}
+    </update>
+
+    <select id="searchFollowing" parameterType="Follow" resultMap="FollowResult">
+        SELECT
+        <include refid="columns"/>
+        FROM fun_follow
+        <where>
+            <if test="foUID != null">
+                FO_UID = #{foUID}
+            </if>
+            <if test="foBeid != null">
+                AND FO_BEID = #{foBeid}
+            </if>
+            <if test="foStatus != null">
+                AND FO_STATUS = #{foStatus}
+            </if>
+        </where>
+    </select>
+</mapper>

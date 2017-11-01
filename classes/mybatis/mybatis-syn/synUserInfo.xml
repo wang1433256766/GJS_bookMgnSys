@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SynUser">
+
+    <resultMap type="cn.com.miaoto.pojo.SynUserInfo" id="SynUserResult">
+        <result column="EmpName" jdbcType="VARCHAR" property="synUserName"/>
+        <result column="CardFixNo" jdbcType="BIGINT" property="card"/>
+        <result column="EmpSex" jdbcType="VARCHAR" property="sex"/>
+        <result column="EmpIDNo" jdbcType="VARCHAR" property="idcard"/>
+        <result column="DptNo" jdbcType="VARCHAR" property="dptID"/>
+        <result column="DptName" jdbcType="VARCHAR" property="dptName"/>
+        <result column="CardTypeName" jdbcType="VARCHAR" property="cardType"/>
+        <result column="LoginName" jdbcType="VARCHAR" property="loginName"/>
+        <result column="EmpNo" jdbcType="VARCHAR" property="workNum"/>
+    </resultMap>
+
+    <sql id="columns">EmpName, CardFixNo, EmpSex, EmpIDNo, DptNo, DptName, CardTypeName, LoginName, EmpNo
+    </sql>
+
+    <select id="selectOne" parameterType="Map" resultMap="SynUserResult">
+        SELECT top 1  EmpName, CardFixNo, EmpIDNo, DptName, EmpNo FROM siomlib WHERE CardFixNo > CAST(#{row} AS VARCHAR) ORDER BY CardFixNo ASC
+    </select>
+
+    <select id="selectCount" parameterType="Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM siomlib
+    </select>
+</mapper>

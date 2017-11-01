@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UserInfo">
+
+    <resultMap type="cn.com.miaoto.pojo.UserInfo" id="UserInfoResult">
+        <id column="U_ID" jdbcType="INTEGER" property="uid"/>
+        <result column="U_NAME" jdbcType="VARCHAR" property="uname"/>
+        <result column="U_EMAIL" jdbcType="VARCHAR" property="email"/>
+        <result column="U_CARD" jdbcType="BIGINT" property="card"/>
+        <result column="U_QR_CODE" jdbcType="VARCHAR" property="qrCode"/>
+        <result column="U_QR_CODE_IMG" jdbcType="VARCHAR" property="qrCodeImg"/>
+        <result column="U_STATUS" jdbcType="TINYINT" property="status"/>
+        <result column="U_PERMIT" jdbcType="INTEGER" property="permitUser"/>
+        <result column="U_CREATETIME" jdbcType="DATE" property="createTime"/>
+        <result column="U_UPDATETIME" jdbcType="DATE" property="updateTime"/>
+        <result column="U_NUMBER" jdbcType="VARCHAR" property="number"/>
+        <result column="U_SALT" jdbcType="VARCHAR" property="salt"/>
+        <result column="U_PWD" jdbcType="VARCHAR" property="pwd"/>
+        <result column="U_TYPE" jdbcType="TINYINT" property="type"/>
+        <result column="u_idcard" jdbcType="VARCHAR" property="idcard"/>
+        <result column="u_phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="u_tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="u_department" jdbcType="VARCHAR" property="department"/>
+        <result column="u_tutor" jdbcType="VARCHAR" property="tutor"/>
+    </resultMap>
+
+    <sql id="columns">U_ID,U_NAME,U_EMAIL,U_CARD,U_QR_CODE,U_QR_CODE_IMG,U_STATUS,U_PERMIT,U_CREATETIME,U_NUMBER,U_UPDATETIME,U_SALT,U_PWD,U_TYPE,U_IDCARD,U_PHONE,U_TEL,U_DEPARTMENT,U_TUTOR
+	</sql>
+
+    <sql id="columns2">U_NAME,U_EMAIL,U_CARD,U_QR_CODE,U_QR_CODE_IMG,U_STATUS,U_PERMIT,U_CREATETIME,U_NUMBER,U_UPDATETIME,U_SALT,U_PWD,U_TYPE,U_IDCARD,U_PHONE,U_TEL,U_DEPARTMENT,U_TUTOR
+	</sql>
+
+    <select id="selectAll" parameterType="cn.com.miaoto.modules.userInfo.model.GetAllUserInfoReq"
+            resultMap="UserInfoResult">
+        SELECT
+        *
+        FROM (
+        SELECT
+        *, ROW_NUMBER() OVER (ORDER BY ${searchFilter.sidx} ${searchFilter.sord}) AS row FROM sys_user
+        <where>
+            <if test="userInfo.status != null">u_status=#{userInfo.status}</if>
+        </where>
+        <where>
+            <if test="userInfo.uname != null">
+                <bind name="unameBind" value="'%' +userInfo.uname + '%'"/>
+                AND u_name LIKE #{unameBind}
+            </if>
+        </where>
+        <where>
+            <if test="userInfo.idcard != null">AND u_idcard=#{userInfo.idcard}</if>
+        </where>
+        <where>
+            <if test="userInfo.card != null">AND u_card=#{userInfo.card}</if>
+        </where>
+        ) a
+        <where>
+            row &gt; #{searchFilter.begin} AND row &lt;= #{searchFilter.end}
+        </where>
+    </select>
+
+    <select id="selectOne" parameterType="UserInfo" resultMap="UserInfoResult">
+        SELECT
+        <include refid="columns"/>
+        FROM sys_user
+        <where>
+            <choose>
+                <when test="uid != null">
+                    u_id = #{uid}
+                </when>
+                <when test="uname != null">
+                    AND u_name = #{unameBind}
+                </when>
+                <when test="email != null">
+                    AND u_email = #{email}
+                </when>
+                <when test="card != null">
+                    AND u_card = #{card}
+                </when>
+                <when test="idcard != null">
+                    AND u_idcard = #{idcard}
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="UserInfo" useGeneratedKeys="true" keyProperty="bid">
+        INSERT INTO sys_user(
+        <include refid="columns2"/>
+        ) VALUES ( #{uname}, #{email}, #{card}, #{qrCode}, #{qrCodeImg}, #{status}, #{permitUser},
+        GETDATE(), #{number}, GETDATE(), #{salt}, #{pwd}, #{type}, #{idcard}, #{phone},
+        #{tel}, #{department}, #{tutor})
+    </insert>
+
+    <update id="update" parameterType="UserInfo">
+        UPDATE sys_user
+        <set>
+            <if test="uname != null">u_name=#{uname},</if>
+            <if test="email != null">u_email=#{email},</if>
+            <if test="card != null">u_card=#{card},</if>
+            <if test="qrCode != null">u_qr_code=#{qrCode},</if>
+            <if test="qrCodeImg != null">u_qr_code_img=#{qrCodeImg},</if>
+            <if test="status != null">u_status=#{status},</if>
+            <if test="permitUser != null">u_permit=#{permitUser},</if>
+            <if test="number != null">u_number=#{number},</if>
+            <if test="createTime != null">u_createtime=#{createTime},</if>
+            <if test="salt != null">u_salt=#{salt},</if>
+            <if test="pwd != null">u_pwd=#{pwd},</if>
+            <if test="type != null">u_type=#{type},</if>
+            <if test="idcard != null">u_idcard=#{idcard},</if>
+            <if test="phone != null">u_phone=#{phone},</if>
+            <if test="tel != null">u_tel=#{tel},</if>
+            <if test="department != null">u_department=#{department},</if>
+            <if test="tutor != null">u_tutor=#{tutor},</if>
+            u_updatetime=GETDATE()
+        </set>
+        WHERE u_id=#{uid}
+    </update>
+
+    <update id="updateByIDCard" parameterType="UserInfo">
+        UPDATE sys_user
+        <set>
+            <if test="uname != null">u_name=#{uname},</if>
+            <if test="email != null">u_email=#{email},</if>
+            <if test="card != null">u_card=#{card},</if>
+            <if test="qrCode != null">u_qr_code=#{qrCode},</if>
+            <if test="qrCodeImg != null">u_qr_code_img=#{qrCodeImg},</if>
+            <if test="status != null">u_status=#{status},</if>
+            <if test="permitUser != null">u_permit=#{permitUser},</if>
+            <if test="number != null">u_number=#{number},</if>
+            <if test="createTime != null">u_createtime=#{createTime},</if>
+            <if test="updateTime != null">u_updatetime=#{updateTime},</if>
+            <if test="salt != null">u_salt=#{salt},</if>
+            <if test="pwd != null">u_pwd=#{pwd},</if>
+            <if test="type != null">u_type=#{type},</if>
+            <if test="idcard != null">u_idcard=#{idcard},</if>
+            <if test="phone != null">u_phone=#{phone},</if>
+            <if test="tel != null">u_tel=#{tel},</if>
+            <if test="department != null">u_department=#{department},</if>
+            <if test="tutor != null">u_tutor=#{tutor},</if>
+        </set>
+        WHERE u_idcard=#{idcard}
+    </update>
+
+    <select id="selectAva" parameterType="UserInfo" resultMap="UserInfoResult">
+        SELECT
+        <include refid="columns"/>
+        FROM sys_user
+        <where>
+            <if test="status != null">u_status=#{status}</if>
+        </where>
+    </select>
+
+    <select id="count" parameterType="UserInfo" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM sys_user
+        <where>
+            <if test="status != null">u_status=#{status}</if>
+        </where>
+        <where>
+            <if test="uname != null">
+                <bind name="unameBind" value="'%' +uname + '%'"/>
+            </if>
+            <if test="uname != null">AND u_name LIKE #{unameBind}</if>
+        </where>
+        <where>
+            <if test="idcard != null">AND u_idcard=#{idcard}</if>
+        </where>
+        <where>
+            <if test="card != null">AND u_card=#{card}</if>
+        </where>
+    </select>
+
+    <select id="selectNext" parameterType="Map" resultMap="UserInfoResult">
+        SELECT
+        *
+        FROM (
+        SELECT
+        <include refid="columns"/>, ROW_NUMBER() OVER (ORDER BY u_id ASC) AS row FROM sys_user
+        ) a
+        <where>
+            row = #{row}
+        </where>
+    </select>
+</mapper>

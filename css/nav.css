@@ -1,0 +1,110 @@
+.navbar{
+	margin: 0 auto;
+	min-width: 1100px;
+	width: 100%;
+	background-color: #eeeeee; /*#F5F8F9*/
+}
+.navbar .nav-image{
+	margin: 0 auto;
+	width: 1100px;
+	height: 100px;
+	overflow: hidden;
+}
+.nav-image img{
+	display: block;
+	float: left;
+	width: 70%;
+	height: 100px;
+}
+.nav-image .logo-text{
+	float: left;
+	width: 30%;
+	height: 100px;
+	text-align: right;
+	font-size: 11px;
+	color: #666;
+	line-height: 100px;
+}
+.navbar .nav{
+	margin: 0 auto;
+	width: 100%;
+	min-width: 1100px;
+	height: 30px;
+	filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#0049dd,endcolorstr=#1491d0,gradientType=0);
+	background: -ms-linear-gradient(top, #0049dd, #1491d0);
+	background: -moz-linear-gradient(top,#0049dd,#1491d0);
+	background: -webkit-linear-gradient(top,#0049dd,#1491d0);
+	background: -o-linear-gradient(top,#0049dd,#1491d0);
+}
+.nav>ul{
+	margin: 0 auto;
+	padding: 0;
+	width: 1100px;
+	height: 30px;
+}
+.nav>ul>li{
+	float: left;
+	overflow: hidden;
+}
+.nav>ul li{
+	height: 30px;
+	list-style-type: none;
+}
+.nav>ul li:hover{
+	filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#fffab0,endcolorstr=#fbd458,gradientType=0);
+	background: -ms-linear-gradient(top, #fffab0, #fbd458);
+	background: -moz-linear-gradient(top,#fffab0,#fbd458);
+	background: -webkit-linear-gradient(top,#fffab0,#fbd458);
+	background: -o-linear-gradient(top,#fffab0,#fbd458);
+}
+.nav>ul li:hover a{
+	color:#000000;
+}
+.nav>ul>li>a{
+	padding: 8px 20px;
+	border-right: 1px solid #ffffff;
+	color: #ffffff;
+	text-decoration: none;
+	font-size: 14px;
+	line-height: 30px;
+}
+.nav .login{
+	text-align: right;
+	line-height: 30px;
+	margin-right: 10px;
+	color: #ffffff;
+}
+.nav .login a{
+	text-decoration: none;
+	color: #ffffff;
+	font-size: 14px;
+}
+.nav .sed-nav,.nav .sed-nav-1{
+	display: none;
+	position: absolute;
+	/*left: 0;
+	width: 100%;
+	height: 30px;
+*/	background-color: #fbd458;
+	z-index: 999;
+}
+.sed-nav ul,.sed-nav-1 ul{
+	margin: 0 auto;
+	padding:0;
+}
+.sed-nav ul li a,.sed-nav-1 ul li a{
+	padding: 0px 20px;
+	text-decoration: none;
+	font-size: 14px;
+	line-height: 30px;
+}
+.active{
+	filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#fffab0,endcolorstr=#fbd458,gradientType=0);
+	background: -ms-linear-gradient(top, #fffab0, #fbd458);
+	background: -moz-linear-gradient(top,#fffab0,#fbd458);
+	background: -webkit-linear-gradient(top,#fffab0,#fbd458);
+	background: -o-linear-gradient(top,#fffab0,#fbd458);
+}
+.nav>ul>.active>a{
+	color:#000000;
+}

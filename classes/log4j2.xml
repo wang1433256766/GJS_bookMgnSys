@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG">
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [ %t ] [ %p ] %c :%L - %m%n"/>
+        </Console>
+
+        <RollingFile name="RollingFile" fileName="/usr/share/tomcat/siomlog/run/app.log"
+                     filePattern="/usr/share/tomcat/siomlog/run/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [ %t ] [ %p ] %c{1}:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+
+        <Logger name="cn.com.miaoto" level="trace"/>
+        <Logger name="org.quartz.core.QuartzSchedulerThread" level="warn"/>
+        <Logger name="org.apache.shiro" level="warn"/>
+        <Logger name="org.mybatis.spring.SqlSessionUtils" level="warn"/>
+
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+
+
+    </Loggers>
+</Configuration>

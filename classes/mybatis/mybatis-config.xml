@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="BatchInfo" type="cn.com.miaoto.pojo.BatchInfo" />
+		<typeAlias alias="Book" type="cn.com.miaoto.pojo.Book" />
+		<typeAlias alias="BookEntity" type="cn.com.miaoto.pojo.BookEntity" />
+		<typeAlias alias="Borrow" type="cn.com.miaoto.pojo.Borrow" />
+		<typeAlias alias="Feedback" type="cn.com.miaoto.pojo.Feedback" />
+		<typeAlias alias="Notify" type="cn.com.miaoto.pojo.Notify" />
+		<typeAlias alias="NotifyUser" type="cn.com.miaoto.pojo.NotifyUser" />
+		<typeAlias alias="Permission" type="cn.com.miaoto.pojo.Permission" />
+		<typeAlias alias="Purchase" type="cn.com.miaoto.pojo.Purchase" />
+		<typeAlias alias="Role" type="cn.com.miaoto.pojo.Role" />
+		<typeAlias alias="RolePermission" type="cn.com.miaoto.pojo.RolePermission" />
+		<typeAlias alias="SearchFilter" type="cn.com.miaoto.pojo.common.SearchFilter" />
+		<typeAlias alias="Setting" type="cn.com.miaoto.pojo.Setting" />
+		<typeAlias alias="UserInfo" type="cn.com.miaoto.pojo.UserInfo" />
+		<typeAlias alias="UserRole" type="cn.com.miaoto.pojo.UserRole" />
+		<typeAlias alias="Follow" type="cn.com.miaoto.pojo.Follow" />
+	</typeAliases>
+</configuration>

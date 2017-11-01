@@ -1,0 +1,109 @@
+.wrap{
+	width:1100px;
+	margin: 0 auto;
+	/*background-color: #ffffff;*/
+	padding: 20px 30px; 
+}
+.wrap .tip-text{
+	color: #333;
+}
+.wrap .tip-text span{
+	color: #f30c0c;
+}
+.button-style{
+	filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#4d8ac6,endcolorstr=#35afd0,gradientType=0);
+	background: -ms-linear-gradient(top, #4d8ac6, #35afd0);
+	background: -moz-linear-gradient(top,#4d8ac6,#35afd0);
+	background: -webkit-linear-gradient(top,#4d8ac6,#35afd0);
+	background: -o-linear-gradient(top,#4d8ac6,#35afd0);
+	color: #ffffff;
+	width: 100px;
+	font-size: 12px;
+	border: 1px solid #4d8ac6;
+	cursor: pointer;
+	padding: 3px 3px;
+}
+input::-webkit-input-placeholder {
+     /* placeholder颜色  */
+    color: #999;
+    /* placeholder字体大小  */
+    font-size: 12px;
+    padding-left: 5px;
+}
+.radio-part{
+	margin-left: 82px;
+}
+/**** 表格的样式 ****/
+.tab ul{
+	width: 1040px;
+	height: 32px;
+	border-bottom: 2px solid #0049dd;
+	overflow: hidden;
+	margin-top: 20px;
+}
+.tab ul li{
+	list-style-type: none;
+	padding: 2px 8px;
+	float: left;
+    height: 32px;
+    border-radius: 5px;
+    line-height: 32px;
+    text-decoration: none;
+	color: #0066cc;
+	font-weight: bold;
+}
+/*.tab ul a{
+	cursor: pointer;
+}*/
+.tab ul .active-tab{
+	filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#1491d0,endcolorstr=#0049dd,gradientType=0);
+	background: -ms-linear-gradient(top, #1491d0, #0049dd);
+	background: -moz-linear-gradient(top,#1491d0,#0049dd);
+	background: -webkit-linear-gradient(top,#1491d0,#0049dd);
+	background: -o-linear-gradient(top,#1491d0,#0049dd);
+	color: #ffffff;
+}
+
+.content ul{
+	width: 1040px;
+}
+.content ul li{
+	list-style-type: none;
+	width: 1000px;
+	background-color: #f7fdff;
+	height: 160px;
+	margin-bottom: 20px;
+	padding-left:30px;
+	overflow: hidden;
+}
+.content-left{
+	width: 870px;
+	float: left;
+}
+.content-left span{
+	display: inline-block;
+    line-height: 1.6;
+}
+.content-left a{
+	color: #45a4e1;
+	font-weight: bold;
+	text-decoration: none;
+	cursor: pointer;
+}
+.content-right{
+	width: 100px;
+	padding-left: 25px;
+	float: left;
+}
+.content-right .img{
+	width: 78px;
+	height: 100px;
+	/*background-color: #000000;*/
+	margin-top: 28px;
+}
+.page{
+	text-align: center;
+}
+.page img{
+	cursor: pointer;
+}

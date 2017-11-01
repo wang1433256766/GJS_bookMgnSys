@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Notify">
+
+    <resultMap type="Notify" id="NotifyResult">
+        <id column="N_ID" jdbcType="INTEGER" property="nid"/>
+        <result column="N_TITLE" jdbcType="VARCHAR" property="title"/>
+        <result column="N_CONTENT" jdbcType="VARCHAR" property="content"/>
+        <result column="N_CREATETIME" jdbcType="DATE" property="createtime"/>
+        <result column="N_UPDATETIME" jdbcType="DATE" property="updatetime"/>
+        <result column="N_TYPE" jdbcType="INTEGER" property="type"/>
+        <result column="N_FROM" jdbcType="INTEGER" property="from"/>
+        <result column="N_TO" jdbcType="INTEGER" property="to"/>
+        <result column="NU_TIME" jdbcType="DATE" property="nuTime"/>
+    </resultMap>
+
+    <sql id="columns">N_ID, N_TITLE, N_CONTENT, N_CREATETIME, N_UPDATETIME, N_TYPE, N_FROM, N_TO
+    </sql>
+
+    <sql id="columns2">N_TITLE, N_CONTENT, N_CREATETIME, N_UPDATETIME, N_TYPE, N_FROM, N_TO
+    </sql>
+
+    <insert id="insert" parameterType="Notify" useGeneratedKeys="true" keyProperty="nid">
+        INSERT INTO sys_notify(
+        <include refid="columns2"/>
+        ) VALUES (#{title}, #{content}, GETDATE(), GETDATE(), #{type}, #{from}, #{to})
+    </insert>
+
+    <select id="selectAll" parameterType="cn.com.miaoto.modules.notify.model.GetAllNotifyReq" resultMap="NotifyResult">
+        SELECT * FROM (
+        SELECT<include refid="columns"/>,sys_notify_user.nu_time, ROW_NUMBER() OVER (ORDER BY ${searchFilter.sidx}
+        ${searchFilter.sord}) AS row
+        FROM sys_notify LEFT JOIN sys_notify_user ON sys_notify.n_id = sys_notify_user.nu_nid
+        where sys_notify.n_to = #{notify.to} OR sys_notify.n_to = 1
+        ) a
+        <where>
+            row &gt; #{searchFilter.begin} AND row &lt;= #{searchFilter.end}
+        </where>
+    </select>
+
+    <select id="selectCount" parameterType="Notify" resultType="java.lang.Integer">
+        SELECT COUNT(1)  FROM sys_notify LEFT JOIN sys_notify_user ON sys_notify.n_id = sys_notify_user.nu_nid where sys_notify.n_to = #{to} OR sys_notify.n_to = 1;
+    </select>
+
+    <select id="select" parameterType="Notify" resultMap="NotifyResult">
+        SELECT * FROM sys_notify LEFT JOIN sys_notify_user ON sys_notify.n_id = sys_notify_user.nu_nid
+        <where>
+            <if test="nid != null">
+                n_id = #{nid}
+            </if>
+        </where>
+    </select>
+</mapper>

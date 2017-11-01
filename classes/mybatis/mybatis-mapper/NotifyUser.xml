@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="NotifyUser">
+
+    <resultMap type="NotifyUser" id="NotifyUserResult">
+        <id column="NU_ID" jdbcType="INTEGER" property="nuid"/>
+        <result column="NU_UID" jdbcType="INTEGER" property="nuUID"/>
+        <result column="NU_TIME" jdbcType="DATE" property="nutime"/>
+        <result column="NU_NID" jdbcType="INTEGER" property="nuNID"/>
+    </resultMap>
+
+    <sql id="columns">NU_ID, NU_UID, NU_TIME, NU_NID
+    </sql>
+
+    <sql id="columns2">NU_UID, NU_TIME, NU_NID
+    </sql>
+
+    <insert id="insert" parameterType="java.util.List">
+        INSERT INTO sys_notify_user(
+        <include refid="columns2"/>
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.nuUID}, GETDATE(), #{item.nuNID} )
+        </foreach>
+    </insert>
+
+    <select id="select" parameterType="Notify" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM sys_notify_user
+        <where>
+            <if test="nuUID != null">
+                nu_uid = #{nuUID}
+            </if>
+            <if test="nuNID != null">
+                AND nu_nid = #{nuNID}
+            </if>
+        </where>
+    </select>
+</mapper>

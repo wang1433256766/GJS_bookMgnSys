@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Purchase">
+
+    <resultMap type="Purchase" id="PurchaseResult">
+        <id column="P_ID" jdbcType="INTEGER" property="pid"/>
+        <result column="P_UID" jdbcType="INTEGER" property="uid"/>
+        <result column="P_ADMIN_UID" jdbcType="INTEGER" property="adminID"/>
+        <result column="P_BOOK_TITLE" jdbcType="VARCHAR" property="title"/>
+        <result column="P_PUBLISHER" jdbcType="VARCHAR" property="publisher"/>
+        <result column="P_AUTHOR" jdbcType="VARCHAR" property="author"/>
+        <result column="P_MARK" jdbcType="VARCHAR" property="mark"/>
+        <result column="P_STATUS" jdbcType="INTEGER" property="status"/>
+        <result column="P_CREATETIME" jdbcType="DATE" property="createtime"/>
+        <result column="P_UPDATETIME" jdbcType="DATE" property="updatetime"/>
+        <result column="P_URI" jdbcType="VARCHAR" property="uri"/>
+        <result column="P_BID" jdbcType="VARCHAR" property="bid"/>
+        <result column="count" jdbcType="INTEGER" property="count"/>
+        <result column="uname" jdbcType="VARCHAR" property="uname"/>
+        <result column="adminName" jdbcType="VARCHAR" property="adminName"/>
+        <result column="P_REASON" jdbcType="VARCHAR" property="reason"/>
+        <result column="P_EDITION" jdbcType="VARCHAR" property="edition"/>
+    </resultMap>
+
+    <sql id="columns">P_ID, P_UID, P_ADMIN_UID, P_BOOK_TITLE, P_PUBLISHER, P_AUTHOR, P_STATUS, P_MARK, P_CREATETIME, P_UPDATETIME, P_URI, P_BID, P_REASON, P_EDITION
+    </sql>
+
+    <sql id="columns2">P_UID, P_ADMIN_UID, P_BOOK_TITLE, P_PUBLISHER, P_AUTHOR, P_STATUS, P_MARK, P_CREATETIME, P_UPDATETIME, P_URI, P_BID, P_REASON, P_EDITION
+    </sql>
+
+
+    <insert id="insert" parameterType="Purchase" useGeneratedKeys="true" keyProperty="pid">
+        INSERT INTO fun_purchase(
+        <include refid="columns2"/>
+        ) VALUES (#{uid}, #{adminID}, #{title}, #{publisher}, #{author}, #{status}, #{mark}, GETDATE(), GETDATE(),
+        #{uri}, #{bid}, #{reason}, #{edition})
+    </insert>
+
+    <select id="selectAll" parameterType="Map" resultMap="PurchaseResult">
+        SELECT * FROM (
+        SELECT<include refid="columns"/>,sys_user.u_name AS uname, ROW_NUMBER() OVER (ORDER BY ${searchFilter.sidx}
+        ${searchFilter.sord}) AS row
+        FROM fun_purchase LEFT JOIN sys_user ON p_uid = sys_user.u_id
+        <where>
+            <if test="purchase.status != null">p_status = #{purchase.status}</if>
+            <if test="purchase.pid != null">AND p_id = #{purchase.pid}</if>
+            <if test="purchase.uid != null">AND p_uid = #{purchase.uid}</if>
+        </where>
+        ) a
+        <where>
+            row &gt; #{searchFilter.begin} AND row &lt;= #{searchFilter.end}
+        </where>
+    </select>
+
+    <update id="update" parameterType="Purchase">
+        UPDATE fun_purchase
+        <set>
+            <if test="uid != null">p_uid= #{uid},</if>
+            <if test="adminID != null">p_admin_uid=#{adminID},</if>
+            <if test="title != null">p_book_title=#{title},</if>
+            <if test="publisher != null">p_publisher=#{publisher},</if>
+            <if test="author != null">p_author=#{author},</if>
+            <if test="status != null">p_status=#{status},</if>
+            <if test="mark != null">p_mark=#{mark},</if>
+            <if test="createtime != null">p_createtime=#{createtime},</if>
+            p_updatetime= GETDATE(),
+            <if test="uri != null">p_uri=#{uri},</if>
+            <if test="bid != null">p_bid=#{bid},</if>
+        </set>
+        WHERE p_id=#{pid}
+    </update>
+
+    <select id="count" parameterType="Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) from fun_purchase
+        <where>
+            <if test="status != null">p_status = #{status}</if>
+            <if test="uid != null">and p_uid = #{uid}</if>
+        </where>
+    </select>
+
+    <select id="countOther" parameterType="Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) from fun_purchase where p_uid != #{uid} OR p_uid IS NULL
+    </select>
+
+    <select id="selectOther" parameterType="cn.com.miaoto.modules.feedback.model.GetUserPurchaseReq"
+            resultMap="PurchaseResult">
+        SELECT * FROM (
+        SELECT<include refid="columns"/>,sys_user.u_name AS uname, ROW_NUMBER() OVER (ORDER BY ${searchFilter.sidx}
+        ${searchFilter.sord}) AS row
+        FROM fun_purchase LEFT JOIN sys_user ON p_uid = sys_user.u_id
+        <where>
+            <if test="purchase.uid != null">p_uid != #{purchase.uid} OR p_uid IS NULL</if>
+        </where>
+        ) a
+        <where>
+            row &gt; #{searchFilter.begin} AND row &lt;= #{searchFilter.end}
+        </where>
+    </select>
+</mapper>

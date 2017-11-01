@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+
+
+        http://www.springframework.org/schema/task    
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+    <!-- 配置文件 -->
+    <bean id="propertyConfigure"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:config/dbConfig.properties</value>
+                <value>classpath:config/sys.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 扫描包 -->
+    <context:component-scan base-package="cn.com.miaoto">
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- shiro -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <bean id="credentialsMatcher"
+          class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="5"/>
+        <property name="storedCredentialsHexEncoded" value="true"/>
+    </bean>
+
+    <bean id="cardRealm" class="cn.com.miaoto.common.realm.CardRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realms">
+            <list>
+                <ref bean="cardRealm"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login"/>
+        <property name="successUrl" value="/"/>
+        <property name="unauthorizedUrl" value="/bookQuery/bookQuerySimple"/>
+        <property name="filterChainDefinitions">
+            <value>
+                /=anon
+                /index=anon
+
+                /login=anon
+                /logout=anon
+                /isLogin=anon
+                /dologin=anon
+
+                /bookQuery/**=anon
+                /bookQueryCus/**=anon
+                /recommendationCus/**=anon
+                /suggestion-customer=anon
+
+                /search=anon
+                /fuzzySearch=anon
+                /getNewBook=anon
+                /getHotBorrow=anon
+                /getHotBook=anon
+                /getBookInfoByBid=anon
+                /getAllBookentity=anon
+                /getBookInfo=anon
+                /getAllFeedback=anon
+                /getAllPurchase=anon
+                /getUserPurchase=anon
+
+                /bookBorrowed/bookBorrow=authc, perms[borrowAndBack]
+                /bookBorrowed/bookReturn=authc, perms[borrowAndBack]
+                /borrow=authc, perms[borrowAndBack]
+                /back=authc, perms[borrowAndBack]
+
+                /bookMgn/bookLose=authc, perms[lost]
+                /updateBook=authc, perms[lost]
+
+                /bookMgn/bookList=authc, perms[insert]
+                /bookAdd=authc, perms[insert]
+                /edit=authc, perms[insert]
+
+                /bookMgn/bookAuditList=authc, perms[check]
+                /checkBook=authc, perms[check]
+
+                /bookStats=authc, perms[stats]
+                /getBookByBatch=authc, perms[stats]
+                /downloadXlsx=authc, perms[stats]
+
+                /userMgn/userMgn=authc, perms[userInfo]
+                /userUpdate=authc, perms[userInfo]
+
+                /suggestion=authc, perms[advice]
+                /backFeedbackauthc, perms[advice]
+
+                /recommendation=authc, perms[purchase]
+                /backPurchase=authc, perms[purchase]
+
+                /sysConfig/sysSetting=authc, perms[setting]
+                /updateSetting=authc, perms[setting]
+                /druid/**=authc, perms[setting]
+
+                /sysConfig/sysNotification=authc, perms[noti]
+                /sendNoti=authc, perms[noti]
+
+                /userMgn/registerAudit=authc, perms[userSyn]
+                /synUser=authc, perms[userSyn]
+
+                /addRoles4User=authc, perms[userRole]
+
+                /public/**=anon
+
+                /addPurchase=anon
+                /addFeedback=anon
+
+                /**=authc
+            </value>
+        </property>
+    </bean>
+
+    <!-- aop -->
+    <aop:aspectj-autoproxy/>
+
+    <!-- task and job -->
+    <task:executor id="myexecutor" pool-size="5"/>
+    <task:annotation-driven executor="myexecutor"/>
+
+    <!-- enable autowire in job -->
+    <bean id="jobFactory" class="cn.com.miaoto.common.JobFactory">
+    </bean>
+
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobFactory" ref="jobFactory"/>
+    </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+</beans>

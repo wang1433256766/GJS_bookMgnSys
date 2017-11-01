@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Permission">
+
+    <resultMap type="cn.com.miaoto.pojo.Permission" id="PermissionResult">
+        <id column="P_ID" jdbcType="INTEGER" property="pid"/>
+        <result column="P_NAME" jdbcType="VARCHAR" property="pname"/>
+        <result column="P_CREATETIME" jdbcType="DATE" property="createtime"/>
+        <result column="P_UPDATETIME" jdbcType="DATE" property="updatetime"/>
+        <result column="P_MARK" jdbcType="VARCHAR" property="mark"/>
+    </resultMap>
+
+    <sql id="columns">P_ID, P_NAME, P_CREATETIME, P_UPDATETIME, P_MARK
+    </sql>
+
+    <sql id="columns2">P_NAME, P_CREATETIME, P_UPDATETIME, P_MARK
+    </sql>
+
+    <sql id="columns3">P_ID, P_NAME, P_CREATETIME, P_UPDATETIME, P_MARK, R_ID, R_NAME, R_CREATETIME, R_UPDATETIME
+    </sql>
+
+    <select id="select" parameterType="Role" resultMap="PermissionResult">
+        SELECT
+        <include refid="columns"/>
+        FROM sys_permission RIGHT JOIN sys_role_permission ON sys_role_permission.rp_pid = sys_permission.p_id RIGHT
+        JOIN sys_role ON sys_role_permission.rp_rid = sys_role.r_id
+        WHERE sys_role.r_id IN
+        <foreach item="item" index="index" collection="list"
+                 open="(" separator="," close=")">
+            #{item.rid}
+        </foreach>
+    </select>
+
+    <select id="banchSelect" parameterType="Role" resultMap="PermissionResult">
+        SELECT
+        <include refid="columns3"/>
+        FROM sys_permission RIGHT JOIN sys_role_permission ON sys_role_permission.rp_pid = sys_permission.p_id RIGHT
+        JOIN sys_role ON sys_role_permission.rp_rid = sys_role.r_id
+        <where>
+            <if test="rid != null">
+                r_id = #{rid}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAll" parameterType="Role" resultMap="PermissionResult">
+        SELECT
+        <include refid="columns"/>
+        FROM sys_permission
+    </select>
+</mapper>
