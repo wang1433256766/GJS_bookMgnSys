@@ -1,6 +1,6 @@
 # GJS_bookMgnSys
 光机所图书管理系统前端源码（html+jquery+css）
-#Tips
+
 ```
 Demo 是部署到阿里云服务器上的，是存在有效期的
 鄙人主要从事前端的开发工作，用的是原生的html,css,jquery写的，喜欢阅读代码的同学可以看看，发现问题欢迎指正
